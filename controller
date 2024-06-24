@@ -7,6 +7,7 @@ porzione=self._view.ddporzione.value
             self._view.create_alert("Selezionare un tipo di porzione")
             return
         dizio=self._model.analisi(porzione)
+
 //textfield:
 calorie=self._view.txtcalorie.value
 if calorie=="":
@@ -15,6 +16,17 @@ if calorie=="":
 grafo = self._model.creaGrafo( int(calorie)) 
 
 //NB: in entrambi i casi il cast del valore (se necessario) va fatto dopo altrimenti da errore
+
+
+/RIMPIRE IL DROPDOWN -> ricordati di chiamare self._controller.fillDD() NELLA VIEW DOPO 
+//DOPO LA CREAZIONE DEL DD
+
+    def fillDD(self):
+        ann="201"
+        for i in range(5,9):
+            anno=ann+str(i)
+            self._view.dd_anno.options.append(ft.dropdown.Option(
+                               text=anno))
 
 
   
