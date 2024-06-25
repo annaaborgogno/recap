@@ -74,7 +74,7 @@ from go_retailers gr"""
                     where s.shape=%s and year(s.`datetime`)=%s and (s.state=%s or s.state=%s)
                      """
 
-        cursor.execute(query,(forma,anno,stato1,stato2))
+        cursor.execute(query,(forma,anno,stato1,stato2,))
 
         for row in cursor:
             result=row["peso"]
