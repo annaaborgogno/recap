@@ -112,3 +112,7 @@ rount(numero, numeroCifre)
 
 //splittare
         direttoreid=direttoreStringa.split("-")[0]
+
+//FAR ACCADERE QUALCOSA ALLA SELEZIONE DI UN DD
+        self.dd_anno=ft.Dropdown(label="Anno", on_change=self._controller.getSquadre)
+//NB captando un evento la funzione nel controller va dafinita così:   def getSquadre(self,e): con l'evento e
