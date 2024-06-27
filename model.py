@@ -7,9 +7,9 @@
     def creaGrafo(self,*):
         self.nodi = DAO.getNodi(*)
         self.grafo.add_nodes_from(self.nodi)
-        self.addEdges(*)
         for v in self.nodi:
             self._idMap[v.id] = v
+         self.addEdges(*)
         return self.grafo
 
     def getNumNodes(self):
@@ -50,8 +50,8 @@ from dataclasses import dataclass
 
 @dataclass
 class Connessione:
-    v1:str
-    v2:str
+    v1:int
+    v2:int
 
 
     def __str__(self):
@@ -98,3 +98,17 @@ class Stato:
 
 //TAGLIARE LA LISTA
   listaOrdinata=listaOrdinata[:3]   -> questo codice mi permette di prendere i primi tre
+
+
+//CALCOLO DISTANZA
+// CON IMPORTAZIONE DI import geopy.distance
+
+posizione1 = (nodo1.lat, nodo1.lng)
+posizione2 = (nodo2.lat, nodo2.lng)
+distanzaCalcolata= geopy.distance.distance(posizione1, posizione2).km
+
+//arrotondare a tot cifre
+rount(numero, numeroCifre)
+
+//splittare
+        direttoreid=direttoreStringa.split("-")[0]
