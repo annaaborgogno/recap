@@ -1,3 +1,21 @@
+//CONTROLLER:
+
+  def handle_cerca(self,e):
+        numeroCondivisi=self._view.txt_attoriCondivisi.value
+        if numeroCondivisi=="":
+            self._view.create_alert("Inserire un numero massimo totale di attori condivisi")
+            return
+        direttore = self._view.dd_direttore.value
+        if direttore is None:
+            self._view.create_alert("Selezionare un direttore")
+            return
+        costo,listaNodi=self._model.getBestPath(direttore, int(numeroCondivisi))
+        self._view.txt_result.controls.append(ft.Text(f"La soluzione migliore è costituita da {costo} attori"))
+        for nodo in listaNodi:
+            self._view.txt_result.controls.append(ft.Text(f"{nodo}"))
+        self._view.update_page()
+
+
 //RICORSIONE CON UN NODO DI PARTENZA CON MASSIMO PESO TOTALR E VINCOLO SUL NUMERO DI ELEMENTI
 
     def getBestPath(self, nodoInizialeString, limite):
@@ -61,3 +79,48 @@
             if self.bilancio(nodo)>bilancioRiferimento:
                 contatore+=1
         return contatore
+
+//RICORSIONE SENZA NODI CONCATENATI EVITANDO I VICINI DI QUELLI GIA' INSERITI
+//CON UN NUMERO DI NODI INCLUSI PRECISO E MASSIMIZZAZIONE
+
+    def getBestPath(self,  numeroGiocatori):
+        self._soluzione = []
+        self._costoMigliore = 0
+        battuti=[]
+        for nodo in self.grafo.nodes:
+            parziale = [nodo]
+            for arcoUscente in self.grafo.out_edges(nodo):
+                battuti.append(arcoUscente[1])
+            self._ricorsione(parziale,numeroGiocatori,battuti)
+        return self._costoMigliore,self._soluzione
+
+    def _ricorsione(self, parziale, numeroGiocatori,battuti):
+        if len(parziale) == numeroGiocatori:
+            if self.grado(parziale)>self._costoMigliore:
+                self._soluzione=copy.deepcopy(parziale)
+                self._costoMigliore=self.grado(parziale)
+
+        if len(parziale)<numeroGiocatori:
+            for n in self.grafo.nodes:
+                if n not in parziale and n not in battuti:
+                    parziale.append(n)
+                    for arcoUscente in self.grafo.out_edges(n):
+                        battuti.append(arcoUscente[1])
+                    self._ricorsione(parziale,numeroGiocatori,battuti)
+                    parziale.pop()
+                    for arcoUscente in self.grafo.out_edges(n):
+                        battuti.remove(arcoUscente[1])
+    def grado(self, listaNodi):
+        gradoTot = 0
+        for nodo in listaNodi:
+            pesoUscente=0
+            pesoEntrante=0
+            for arcoUscente in self.grafo.out_edges(nodo):
+                pesoUscente+= self.grafo[arcoUscente[0]][arcoUscente[1]]["weight"]
+            for arcoEntrante in self.grafo.in_edges(nodo):
+                pesoEntrante+=self.grafo[arcoEntrante[0]][arcoEntrante[1]]["weight"]
+            gradoTot+=pesoUscente-pesoEntrante
+        return gradoTot
+
+
+
