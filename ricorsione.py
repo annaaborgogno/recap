@@ -182,4 +182,35 @@
 //CAMMINO O PERCORSO = SELF.GRAFO.NEIGHBOURS
 //LISTA/INSEIEM -> non ci interessa se sono concatenati -> self.grafo.nodes
 
+//RICORSIONE CON NODI NON RIPETUTI, INSIEME DI TOT ELEMENTI E ULTIMO NODO COINCIDENTE CON IL PRIMO
 
+    def getBestPath(self, limiteEsatto):
+        self._soluzione = []
+        self._costoMigliore = 0
+        for nodo in self.grafo.nodes:
+            parziale=[nodo]
+            self._ricorsione(parziale,limiteEsatto+1)
+        return self._costoMigliore,self._soluzione
+
+    def _ricorsione(self, parziale, limiteEsatto):
+        if len(parziale) == limiteEsatto:
+            if self.peso(parziale)>self._costoMigliore:
+                self._soluzione=copy.deepcopy(parziale)
+                self._costoMigliore=self.peso(parziale)
+
+        if len(parziale)<limiteEsatto:
+            for n in self.grafo.neighbors(parziale[-1]):
+                if len(parziale)==limiteEsatto-1 and n==parziale[0]:
+                        parziale.append(n)
+                        self._ricorsione(parziale, limiteEsatto)
+                        parziale.pop()
+                if len(parziale)<limiteEsatto-1 and n not in parziale:
+                    parziale.append(n)
+                    self._ricorsione(parziale, limiteEsatto)
+                    parziale.pop()
+
+    def peso(self, listaNodi):
+        pesoTot = 0
+        for i in range(0, len(listaNodi) - 1):
+            pesoTot += self.grafo[listaNodi[i]][listaNodi[i + 1]]["weight"]
+        return pesoTot
