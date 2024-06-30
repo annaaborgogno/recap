@@ -179,5 +179,7 @@
             memoriaTot+=nodo.Bytes
         return memoriaTot
 
+//CAMMINO O PERCORSO = SELF.GRAFO.NEIGHBOURS
+//LISTA/INSEIEM -> non ci interessa se sono concatenati -> self.grafo.nodes
 
 
