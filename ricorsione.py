@@ -122,5 +122,30 @@
             gradoTot+=pesoUscente-pesoEntrante
         return gradoTot
 
+//RICORSIONE SU GRAFO ORIENTATO CON REQUISITI SPECIFICI QUALI: primo vertice no archi entranti, ultimo vertice no archi uscenti
+// vertici intermedi adiacenti e massimizzazione della lunghezza
+
+ def getBestPath(self):
+        self._soluzione = []
+        self._costoMigliore = 0
+        for nodo in self.grafo.nodes:
+            if self.grafo.in_degree(nodo)==0:
+                parziale = [nodo]
+                self._ricorsione(parziale)
+        return self._costoMigliore, self._soluzione
+
+    def _ricorsione(self, parziale):
+        if self.grafo.out_degree(parziale[-1])==0:
+            if len(parziale) > self._costoMigliore:
+                self._soluzione = copy.deepcopy(parziale)
+                self._costoMigliore = len(parziale)
+
+        for n in self.grafo.successors(parziale[-1]):
+            if n not in parziale:
+                parziale.append(n)
+                self._ricorsione(parziale)
+                parziale.pop()
+
+
 
 
