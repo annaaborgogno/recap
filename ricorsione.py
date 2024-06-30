@@ -147,5 +147,37 @@
                 parziale.pop()
 
 
+//RICORSIONE CON I NODI APPARTENENTI ALLA STESSA COMPONENTE CONNESSA DI UN NODO INIZIALE
+
+ def getBestPath(self, nodoInizialeString, limite):
+        self._soluzione = []
+        self._costoMigliore = 0
+        componenteConnessa=[]
+        nodoIniziale = self._idMapNome[nodoInizialeString]
+        for component in nx.connected_components(self.grafo):
+            if nodoIniziale in component:
+                componenteConnessa=set(component)
+        parziale = [nodoIniziale]
+        self._ricorsione(parziale, limite,componenteConnessa)
+        return self._costoMigliore, self._soluzione
+
+    def _ricorsione(self, parziale, limite,componenteConnessa):
+        if self.memoria(parziale) <= limite:
+            if len(parziale) > self._costoMigliore:
+                self._soluzione = copy.deepcopy(parziale)
+                self._costoMigliore = len(parziale)
+
+            for n  in componenteConnessa:
+                if n not in parziale:
+                    parziale.append(n)
+                    self._ricorsione(parziale, limite,componenteConnessa)
+                    parziale.pop()
+
+    def memoria(self, listaNodi):
+        memoriaTot=0
+        for nodo in listaNodi:
+            memoriaTot+=nodo.Bytes
+        return memoriaTot
+
 
 
