@@ -63,4 +63,9 @@ for nazione in nazioni:
 
 
   
-  
+  //CREATE ALERT:
+    def create_alert(self, message):
+        dlg = ft.AlertDialog(title=ft.Text(message))
+        self._page.dialog = dlg
+        dlg.open = True
+        self._page.update()
