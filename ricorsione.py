@@ -214,3 +214,5 @@
         for i in range(0, len(listaNodi) - 1):
             pesoTot += self.grafo[listaNodi[i]][listaNodi[i + 1]]["weight"]
         return pesoTot
+
+//INSERIRE CONTROLLO PESO CRESCENTE
