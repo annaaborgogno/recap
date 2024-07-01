@@ -69,3 +69,23 @@ for nazione in nazioni:
         self._page.dialog = dlg
         dlg.open = True
         self._page.update()
+
+//UN DD CHE SI POPOLA AL CLICK SULL ALTRO
+    def fillDDanno(self):
+        anni=self._model.getAnni
+        for anno in anni:
+            self._view.dd_anno.options.append(ft.dropdown.Option(
+                text=anno))
+
+    def fillDDforme(self,e):
+        self._view.dd_shape.options=[]
+        forme=self._model.getForme(int(self._view.dd_anno.value))
+        for forma in forme:
+            self._view.dd_shape.options.append(ft.dropdown.Option(
+                text=forma))
+        self._view.update_page()
+
+SU VIEW:
+ self.dd_anno=ft.Dropdown(label="Anno", on_change=self._controller.fillDDforme)
+        self.dd_shape=ft.Dropdown(label="Shape")
+        self._controller.fillDDanno()
