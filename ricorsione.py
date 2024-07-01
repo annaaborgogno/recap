@@ -215,4 +215,40 @@
             pesoTot += self.grafo[listaNodi[i]][listaNodi[i + 1]]["weight"]
         return pesoTot
 
-//INSERIRE CONTROLLO PESO CRESCENTE
+//RICORSIONE MASSIMIZZARE LA DISTANZA E PESO CRESCENTE
+    def getBestPath(self):
+        self._soluzione = []
+        self._costoMigliore = 0
+        for nodo in self.grafo.nodes:
+                parziale = [nodo]
+                self._ricorsione(parziale)
+        return self._costoMigliore, self._soluzione
+
+    def _ricorsione(self, parziale):
+        if self.distanza(parziale) > self._costoMigliore:
+                self._soluzione = copy.deepcopy(parziale)
+                self._costoMigliore = self.distanza(parziale)
+
+        for n in self.grafo.neighbors(parziale[-1]):
+            if n not in parziale:
+                if len(parziale)>=2:
+                    if self.grafo[parziale[-1]][n]["weight"]>self.grafo[parziale[-1]][parziale[-2]]["weight"]:
+                        parziale.append(n)
+                        self._ricorsione(parziale)
+                        parziale.pop()
+                else:
+                    parziale.append(n)
+                    self._ricorsione(parziale)
+                    parziale.pop()
+
+    def distanza(self,listaNodi):
+        distanzaTot=0
+        for i in range(0, len(listaNodi) - 1):
+            stato1=listaNodi[i]
+            stato2=listaNodi[i+1]
+            posizione1=(stato1.Lat,stato1.Lng)
+            posizione2 = (stato2.Lat, stato2.Lng)
+            distanza = distance.geodesic(posizione1, posizione2).km
+            distanzaTot+=distanza
+            self.dista[f"{stato1.id}-{stato2.id}"]=distanza
+        return distanzaTot
