@@ -116,3 +116,17 @@ rount(numero, numeroCifre)
 //FAR ACCADERE QUALCOSA ALLA SELEZIONE DI UN DD
         self.dd_anno=ft.Dropdown(label="Anno", on_change=self._controller.getSquadre)
 //NB captando un evento la funzione nel controller va dafinita così:   def getSquadre(self,e): con l'evento e
+
+
+//PREDECESSORI SUCCESSORI E RAGGIUNGIBILI:
+    def analisi(self, stato):
+        prec=[]
+        succ=[]
+        all=[]
+        for nodi in self.grafo.predecessors(stato):
+            prec.append(nodi)
+        for nodi in self.grafo.successors(stato):
+            succ.append(nodi)
+        for nodi in nx.dfs_tree(self.grafo,stato):
+            all.append(nodi)
+        return prec,succ,all
