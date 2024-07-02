@@ -252,3 +252,36 @@
             distanzaTot+=distanza
             self.dista[f"{stato1.id}-{stato2.id}"]=distanza
         return distanzaTot
+
+
+//RICORSIONE SU ARCHI
+
+ def getBestPath(self):
+        self._soluzione = []
+        self._costoMigliore = 0
+        print(self.maggiori)
+        for arco in self.maggiori:
+            parziale = [arco]
+            self._ricorsione(parziale)
+            parziale.pop()
+        return self._costoMigliore, self._soluzione
+
+    def _ricorsione(self, parziale):
+        if self.peso(parziale) > self._costoMigliore:
+                    self._soluzione = copy.deepcopy(parziale)
+                    self._costoMigliore = self.peso(parziale)
+
+        for n in self.grafo.successors(parziale[-1][1]):
+            if (parziale[-1][1],n) in self.maggiori:
+                if (parziale[-1][1],n) not in parziale and (n,parziale[-1][1]) not in parziale:
+                    parziale.append((parziale[-1][1],n))
+                    self._ricorsione(parziale)
+                    parziale.pop()
+
+
+    def peso(self, listaArchi):
+        pesoTot = 0
+        for arco in listaArchi:
+            pesoTot += self.grafo[arco[0]][arco[1]]["weight"]
+        return pesoTot
+
