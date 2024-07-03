@@ -130,6 +130,42 @@ SU VIEW:
             self._view._txt_result.controls.append(ft.Text("Attenzione, soglia inserita non numerica."))
             self._view.update_page()
             return
+//CONTROLLER CON GESTIONE ERRORI
+    def handleCreaGrafo(self, e):
+        d=self._view._txtInDurata.value
+        if d=="":
+            self._view.create_alert("Inserire una durata in minuti")
+            return
+        try:
+            dInt=int(d)
+        except ValueError:
+            self._view.create_alert("INSERIRE UN INTERO")
+            return
+        grafo = self._model.creaGrafo(dInt)
+        self._view.txt_result.controls.append(ft.Text("Grafo correttamente creato."))
+        self._view.txt_result.controls.append(ft.Text(f"Il grafo contiene "
+                                                      f"{self._model.getNumNodes()} nodi."))
+        self._view.txt_result.controls.append(ft.Text(f"Il grafo contiene "
+                                                      f"{self._model.getNumEdges()} archi."))
+        for nodo in grafo:
+            self._view. _ddAlbum.options.append(ft.dropdown.Option(on_click=self.getSelectedAlbum,
+                               text=nodo))
+
+        self._view.update_page()
+
+    def getSelectedAlbum(self, e):
+        if e.control.data is None:
+            self._choiceAlbum = None
+        else:
+            self._choiceAlbum = e.control.data
+        print(self._choiceAlbum)
+
+    def handleAnalisiComp(self, e):
+        if self._choiceAlbum is None:
+            self._view.create_alert("Attenzione album non selezionato")
+            pass
+        dimensione,durata=self._model.getAnalisi(self._choiceAlbum)
+        
 
         self._model.buildGraph(provider, sogliaFloat)
         ecc
