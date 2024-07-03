@@ -132,4 +132,4 @@ rount(numero, numeroCifre)
         return prec,succ,all
 
 //COMPONENTE CONNESSA CONTENENTE UN NODO
-        nodiConnessi=list(nx.node_connected_components(self.grafo,album))
+        nodiConnessi=list(nx.node_connected_component(self.grafo,album))
