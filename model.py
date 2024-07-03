@@ -130,3 +130,6 @@ rount(numero, numeroCifre)
         for nodi in nx.dfs_tree(self.grafo,stato):
             all.append(nodi)
         return prec,succ,all
+
+//COMPONENTE CONNESSA CONTENENTE UN NODO
+        nodiConnessi=list(nx.node_connected_components(self.grafo,album))
