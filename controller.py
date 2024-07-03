@@ -89,3 +89,47 @@ SU VIEW:
  self.dd_anno=ft.Dropdown(label="Anno", on_change=self._controller.fillDDforme)
         self.dd_shape=ft.Dropdown(label="Shape")
         self._controller.fillDDanno()
+
+
+//GESTIONE INPUT:
+ def fillDD(self):
+        allNodes = self._model.getAllNodes()
+        for n in allNodes:
+            self._view._ddAeroportoP.options.append(
+                ft.dropdown.Option(
+                    data= n,
+                    on_click=self.readDDAeroportoP,
+                    text=n.AIRPORT
+                ))
+            self._view._ddAeroportoA.options.append(
+                ft.dropdown.Option(
+                    data=n,
+                    on_click=self.readDDAeroportoA,
+                    text=n.AIRPORT
+                ))
+
+    def readDDAeroportoP(self, e):
+        if e.control.data is None:
+            self._choiceAeroportoP = None
+        else:
+            self._choiceAeroportoP = e.control.data
+        print(f"readDDAeroportoP called -- {self._choiceAeroportoP}")
+
+//GESTIONE ERRORI:
+        soglia = self._view._txtInDistanza.value
+        if soglia == "":
+            self._view._txt_result.controls.clear()
+            self._view._txt_result.controls.append(ft.Text("Distanza non inserita."))    //oppure create alert
+            self._view.update_page()
+            return
+
+        try:
+            sogliaFloat = float(soglia)
+        except ValueError:
+            self._view._txt_result.controls.clear()
+            self._view._txt_result.controls.append(ft.Text("Attenzione, soglia inserita non numerica."))
+            self._view.update_page()
+            return
+
+        self._model.buildGraph(provider, sogliaFloat)
+        ecc
