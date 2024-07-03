@@ -131,6 +131,16 @@ SU VIEW:
             self._view.update_page()
             return
 //CONTROLLER CON GESTIONE ERRORI
+    import flet as ft
+
+
+class Controller:
+    def __init__(self, view, model):
+        # the view, with the graphical elements of the UI
+        self._view = view
+        # the model, which implements the logic of the program and holds the data
+        self._model = model
+
     def handleCreaGrafo(self, e):
         d=self._view._txtInDurata.value
         if d=="":
@@ -147,9 +157,10 @@ SU VIEW:
                                                       f"{self._model.getNumNodes()} nodi."))
         self._view.txt_result.controls.append(ft.Text(f"Il grafo contiene "
                                                       f"{self._model.getNumEdges()} archi."))
-        for nodo in grafo:
-            self._view. _ddAlbum.options.append(ft.dropdown.Option(on_click=self.getSelectedAlbum,
-                               text=nodo))
+        for n in grafo:
+            self._view._ddAlbum.options.append(ft.dropdown.Option(data=n.Title,
+                            text = n.Title, on_click=self.getSelectedAlbum
+                          ))
 
         self._view.update_page()
 
@@ -158,14 +169,15 @@ SU VIEW:
             self._choiceAlbum = None
         else:
             self._choiceAlbum = e.control.data
-        print(self._choiceAlbum)
+      
+
 
     def handleAnalisiComp(self, e):
-        if self._choiceAlbum is None:
+        if self._choiceAlbum ==None:
             self._view.create_alert("Attenzione album non selezionato")
-            pass
+            return
         dimensione,durata=self._model.getAnalisi(self._choiceAlbum)
-        
-
-        self._model.buildGraph(provider, sogliaFloat)
-        ecc
+        self._view.txt_result.controls.append(ft.Text(f"Componente conenssa -  {self._choiceAlbum} "
+                                                      f"di dimensione {dimensione} e durata complessiva"
+                                                      f"pari a "
+                                                      f"{durata}"))
