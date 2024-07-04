@@ -127,5 +127,24 @@ public List<StringPair> getEdges(Year anno) {
 		}
 		
 	}
+//CON FORMA E ANNO DATI
+select t1.a1,t2.a2, t1.d1, t2.d2
+from (select s.id as a1, s.state as s1, s.`datetime` as d1
+from sighting s 
+where s.shape ='oval' and year(s.`datetime`)=2002) as t1,
+(select s.id as a2, s.state as s2,  s.`datetime` as d2
+from sighting s 
+where s.shape ='oval' and year(s.`datetime`)=2002) as t2
+where t1.s1=t2.s2 and t1.a1<t2.a2
 
 
+//CON FORMA E ANNO NON DATI
+select t1.a1,t2.a2, t1.d1, t2.d2
+from (select s.id as a1, s.state as s1, s.`datetime` as d1,
+s.shape as f1
+from sighting s ) as t1,
+(select s.id as a2, s.state as s2,  s.`datetime` as d2, s.shape as f2
+from sighting s 
+where s.shape ='oval' and year(s.`datetime`)=2002) as t2
+where t1.s1=t2.s2 and t1.a1<t2.a2
+and t1.f1=t2.f2 and year(t1.d1)= year(t2.d2)
