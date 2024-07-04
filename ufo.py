@@ -148,3 +148,34 @@ from sighting s
 where s.shape ='oval' and year(s.`datetime`)=2002) as t2
 where t1.s1=t2.s2 and t1.a1<t2.a2
 and t1.f1=t2.f2 and year(t1.d1)= year(t2.d2)
+
+
+//CON FORMA E ANNO
+
+    def addEdges(self, forma,anno):
+        self.grafo.clear_edges()
+        allEdges = DAO.getConnessioni(forma,anno)
+        for connessione in allEdges:
+            nodo1 = self._idMap[connessione.v1]
+            nodo2 = self._idMap[connessione.v2]
+            if nodo1 in self.grafo.nodes and nodo2 in self.grafo.nodes:
+                if self.grafo.has_edge(nodo1, nodo2) == False:
+			if connessione.d1<connessione.d2:
+                   		 self.grafo.add_edge(nodo1, nodo2, weight=peso)
+			if connessione.d2<connessione.d1:
+				self.grafo.add_edge(nodo1, nodo1, weight=peso)
+
+//SENZA FORMA E ANNO
+
+    def addEdges(self):
+        self.grafo.clear_edges()
+        allEdges = DAO.getConnessioni()
+        for connessione in allEdges:
+            nodo1 = self._idMap[connessione.v1]
+            nodo2 = self._idMap[connessione.v2]
+            if nodo1 in self.grafo.nodes and nodo2 in self.grafo.nodes:
+                if self.grafo.has_edge(nodo1, nodo2) == False:
+			if connessione.d1<connessione.d2:
+                   		 self.grafo.add_edge(nodo1, nodo2, weight=peso)
+			if connessione.d2<connessione.d1:
+				self.grafo.add_edge(nodo1, nodo1, weight=peso)
