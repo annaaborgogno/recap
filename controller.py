@@ -131,7 +131,7 @@ SU VIEW:
             self._view.update_page()
             return
 //CONTROLLER CON GESTIONE ERRORI
-    import flet as ft
+  import flet as ft
 
 
 class Controller:
@@ -158,7 +158,7 @@ class Controller:
         self._view.txt_result.controls.append(ft.Text(f"Il grafo contiene "
                                                       f"{self._model.getNumEdges()} archi."))
         for n in grafo:
-            self._view._ddAlbum.options.append(ft.dropdown.Option(data=n.Title,
+            self._view._ddAlbum.options.append(ft.dropdown.Option(data=n,
                             text = n.Title, on_click=self.getSelectedAlbum
                           ))
 
@@ -169,11 +169,11 @@ class Controller:
             self._choiceAlbum = None
         else:
             self._choiceAlbum = e.control.data
-      
+
 
 
     def handleAnalisiComp(self, e):
-        if self._choiceAlbum ==None:
+        if self._choiceAlbum is None:
             self._view.create_alert("Attenzione album non selezionato")
             return
         dimensione,durata=self._model.getAnalisi(self._choiceAlbum)
@@ -181,3 +181,8 @@ class Controller:
                                                       f"di dimensione {dimensione} e durata complessiva"
                                                       f"pari a "
                                                       f"{durata}"))
+
+        self._view.update_page()
+
+//NB IN QUESTO MODO L'ALBUM SELEZIONATO GIA' E' L'OGGETTO INTERO E NON SERVE L'IDMAP
+//NEL MODEL
