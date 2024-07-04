@@ -23,25 +23,31 @@ class Stato:
 
 //avvistamenti 
 from dataclasses import dataclass
+from datetime import datetime
+
 
 @dataclass
-class Avvistamento:
+class Sighting:
     id: int
-  datetime:str
-  city:str
-  state:str
-  country:str
-  shape:str
-  duration:int
-  duration_hm:str
-  comments:str
-  date_posted:str
-  latitude:float
-  longitude:float
+    7: datetime
+    city: str
+    state: str
+    country:str
+    shape: str
+    duration: int
+    duration_hm: str
+    comments: str
+    date_posted: datetime
+    latitude: float
+    longitude: float
 
+
+    def __str__(self):
+        return self.country
 
     def __hash__(self):
         return hash(self.id)
+        
         
 //I vertici del grafo saranno gli stati americani (o meglio, il sottoinsieme di stati
 in cui vi è stato almeno un avvistamento nell'anno)
@@ -86,4 +92,40 @@ colonna “datetime”), nei due stati considerati.
         select count(*) as peso
         from sighting s 
         where s.shape=%s and year(s.`datetime`)=%s and (s.state=%s or s.state=%s)
+
+
+
+public List<StringPair> getEdges(Year anno) {
+		String sql = "select s1.state as state1 , s2.state as state2, count(*) " + 
+				"from sighting s1, sighting s2 " + 
+				"where year(s1.datetime)=year(s2.datetime) " + 
+				"and year(s1.datetime)=? " + 
+				"and s1.country='us' " + 
+				"and s2.country='us' " + 
+				"and s2.datetime>s1.datetime " + 
+				"and s1.state<>s2.state " + 
+				"group by s1.state, s2.state " ;
+		
+		try {
+			Connection conn = DBConnect.getConnection() ;
+			PreparedStatement st = conn.prepareStatement(sql) ;
+			
+			st.setInt(1, anno.getValue());
+			
+			ResultSet res = st.executeQuery() ;
+			
+			List<StringPair>list = new ArrayList<>() ;
+			while(res.next()) {
+				list.add(new StringPair(res.getString("state1"), res.getString("state2"))) ;
+			}
+			conn.close();
+			return list ;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null ;
+		}
+		
+	}
+
 
