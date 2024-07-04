@@ -186,3 +186,9 @@ class Controller:
 
 //NB IN QUESTO MODO L'ALBUM SELEZIONATO GIA' E' L'OGGETTO INTERO E NON SERVE L'IDMAP
 //NEL MODEL
+
+//disabilitare e attivare bottoni:
+        self._txtInNumTratte = ft.TextField(label="Num Tratte Max", width=200,
+                                                     disabled=True)
+PER ATTIVARE:
+        self._view._txtInNumTratte.disabled = False
