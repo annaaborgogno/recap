@@ -132,4 +132,15 @@ rount(numero, numeroCifre)
         return prec,succ,all
 
 //COMPONENTE CONNESSA CONTENENTE UN NODO
-        nodiConnessi=list(nx.node_connected_component(self.grafo,album))
+        nodiConnessi=list(nx.node_connected_component(self.grafo,album)
+
+//SE ESISTE IL PERCORSO TRA DUE NODI TROVA IL MINIMO
+                def esistePercorso(self, v0, v1):
+        connessa = nx.node_connected_component(self._grafo, v0)
+        if v1 in connessa:
+            return True
+
+        return False
+
+    def trovaCamminoD(self, v0, v1):
+        return nx.dijkstra_path(self._grafo, v0, v1)
