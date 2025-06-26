@@ -151,3 +151,32 @@ from go_retailers gr"""
         FROM results r
         JOIN constructors c ON r.constructorId = c.constructorId
         WHERE r.driverId = 1;"""
+
+
+#Alla pressione del bottone “Seleziona stagione”, creare un grafo con le seguenti caratteristiche: i vertici del grafo rappresentano le gare disputate
+#nella stagione selezionata; gli archi del grafo sono non orientati e pesati, ed il peso rappresenta il numero di piloti che hanno corso in entrambe le gare adiacenti all’arco, e che so
+
+@staticmethod
+def getEdges(year):
+    cnx = DBConnect.get_connection()
+    cursor = cnx.cursor(dictionary=True)
+    query = """select LEAST(ra1.raceId, ra2.raceId) as raceId1, GREATEST(ra1.raceId, ra2.raceId) as raceId2, COUNT(*) AS peso
+                   from races ra1, results re1, races ra2, results re2
+                   where ra1.`year` = %s 
+                   and ra1.`year` = ra2.`year`
+                   and ra1.raceId = re1.raceId 
+                   and ra2.raceId = re2.raceId
+                   and ra1.raceId != ra2.raceId
+                   and re1.driverId = re2.driverId
+                   and re1.statusId = 1
+                   and re2.statusId = 1
+                   group by LEAST(ra1.raceId, ra2.raceId), GREATEST(ra1.raceId, ra2.raceId)
+                   order by peso desc"""
+    cursor.execute(query, (year,))
+
+    res = []
+    for row in cursor:
+        res.append(Edge(**row))
+    cursor.close()
+    cnx.close()
+    return res
