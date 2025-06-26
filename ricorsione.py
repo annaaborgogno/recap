@@ -1,6 +1,7 @@
-//CONTROLLER:
+#CONTROLLER:
+import copy
 
-  def handle_cerca(self,e):
+def handle_cerca(self,e):
         numeroCondivisi=self._view.txt_attoriCondivisi.value
         if numeroCondivisi=="":
             self._view.create_alert("Inserire un numero massimo totale di attori condivisi")
@@ -16,8 +17,7 @@
         self._view.update_page()
 
 
-//RICORSIONE CON UN NODO DI PARTENZA CON MASSIMO PESO TOTALR E VINCOLO SUL NUMERO DI ELEMENTI
-
+#RICORSIONE CON UN NODO DI PARTENZA CON MASSIMO PESO TOTALE E VINCOLO SUL NUMERO DI ELEMENTI
     def getBestPath(self, nodoInizialeString, limite):
         self._soluzione = []
         self._costoMigliore = 0
@@ -43,7 +43,7 @@
             pesoTot += self.grafo[listaNodi[i]][listaNodi[i + 1]]["weight"]
         return pesoTot
 
-//RICORSIONE CON NODO DI PARTENZA E NODO FINALE CON UN VINCOLO E MASSIMIZZAZIONE DIVERSA (NO PESO)
+#RICORSIONE CON NODO DI PARTENZA E NODO FINALE CON UN VINCOLO E MASSIMIZZAZIONE DIVERSA (NO PESO)
 
  def getBestPath(self, limite,nodoInizialeStringa, nodoFinaleStringa):
         self._soluzione = []
@@ -80,8 +80,8 @@
                 contatore+=1
         return contatore
 
-//RICORSIONE SENZA NODI CONCATENATI EVITANDO I VICINI DI QUELLI GIA' INSERITI
-//CON UN NUMERO DI NODI INCLUSI PRECISO E MASSIMIZZAZIONE
+#RICORSIONE SENZA NODI CONCATENATI EVITANDO I VICINI DI QUELLI GIA' INSERITI
+#CON UN NUMERO DI NODI INCLUSI PRECISO E MASSIMIZZAZIONE
 
     def getBestPath(self,  numeroGiocatori):
         self._soluzione = []
@@ -122,8 +122,8 @@
             gradoTot+=pesoUscente-pesoEntrante
         return gradoTot
 
-//RICORSIONE SU GRAFO ORIENTATO CON REQUISITI SPECIFICI QUALI: primo vertice no archi entranti, ultimo vertice no archi uscenti
-// vertici intermedi adiacenti e massimizzazione della lunghezza
+#RICORSIONE SU GRAFO ORIENTATO CON REQUISITI SPECIFICI QUALI: primo vertice no archi entranti, ultimo vertice no archi uscenti
+# vertici intermedi adiacenti e massimizzazione della lunghezza
 
  def getBestPath(self):
         self._soluzione = []
@@ -147,7 +147,7 @@
                 parziale.pop()
 
 
-//RICORSIONE CON I NODI APPARTENENTI ALLA STESSA COMPONENTE CONNESSA DI UN NODO INIZIALE
+#RICORSIONE CON I NODI APPARTENENTI ALLA STESSA COMPONENTE CONNESSA DI UN NODO INIZIALE
 
  def getBestPath(self, nodoInizialeString, limite):
         self._soluzione = []
@@ -179,10 +179,10 @@
             memoriaTot+=nodo.Bytes
         return memoriaTot
 
-//CAMMINO O PERCORSO = SELF.GRAFO.NEIGHBOURS
-//LISTA/INSEIEM -> non ci interessa se sono concatenati -> self.grafo.nodes
+#CAMMINO O PERCORSO = SELF.GRAFO.NEIGHBOURS
+#LISTA/INSEIEM -> non ci interessa se sono concatenati -> self.grafo.nodes
 
-//RICORSIONE CON NODI NON RIPETUTI, INSIEME DI TOT ELEMENTI E ULTIMO NODO COINCIDENTE CON IL PRIMO
+#RICORSIONE CON NODI NON RIPETUTI, INSIEME DI TOT ELEMENTI E ULTIMO NODO COINCIDENTE CON IL PRIMO
 
     def getBestPath(self, limiteEsatto):
         self._soluzione = []
@@ -215,7 +215,7 @@
             pesoTot += self.grafo[listaNodi[i]][listaNodi[i + 1]]["weight"]
         return pesoTot
 
-//RICORSIONE MASSIMIZZARE LA DISTANZA E PESO CRESCENTE
+#RICORSIONE MASSIMIZZARE LA DISTANZA E PESO CRESCENTE
     def getBestPath(self):
         self._soluzione = []
         self._costoMigliore = 0
@@ -254,8 +254,7 @@
         return distanzaTot
 
 
-//RICORSIONE SU ARCHI
-
+#RICORSIONE SU ARCHI
  def getBestPath(self):
         self._soluzione = []
         self._costoMigliore = 0
@@ -284,4 +283,3 @@
         for arco in listaArchi:
             pesoTot += self.grafo[arco[0]][arco[1]]["weight"]
         return pesoTot
-

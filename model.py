@@ -1,4 +1,4 @@
-//CREAZIONE GRAFO
+#CREAZIONE GRAFO
 
     def __init__(self):
         self.grafo = nx.Graph()
@@ -17,10 +17,9 @@
 
     def getNumEdges(self):
         return len(self.grafo.edges)
-
-//NB: sulla base al metodo utilizzato per la creazione degli archi ->  necessario
-// creare una metodo nel DAO che prende tutti gli oggetti di una tipologia
-// su cui poi creare la _idMap  dall'init in quel caso:
+#NB: sulla base al metodo utilizzato per la creazione degli archi ->  necessario
+#creare una metodo nel DAO che prende tutti gli oggetti di una tipologia
+#su cui poi creare la _idMap  dall'init in quel caso:
 
  def __init__(self):
         self.allOggetti=DAO.getAllOggetti()
@@ -29,9 +28,9 @@
        for v in self.allOggetti:
                 self._idMap[v.id] = v
 
-//METODO 1 ARCHI -> creo le connessioni che sono generiche non solo dei nodi del grafo
-//per usare questo metodo la idMap deve essere generica 
-// in base alle necessita le connessioni possono includere o meno il peso
+#METODO 1 ARCHI -> creo le connessioni che sono generiche non solo dei nodi del grafo
+#per usare questo metodo la idMap deve essere generica
+#in base alle necessita le connessioni possono includere o meno il peso
 
     def addEdges(self, *):
         self.grafo.clear_edges()
@@ -45,7 +44,7 @@
                     self.grafo.add_edge(nodo1, nodo2, weight=peso)
 
 
-//CLASSE CONNESSIONI (NO PESO E VARIARE STR O INT IN BASE AL CASO)
+#CLASSE CONNESSIONI (NO PESO E VARIARE STR O INT IN BASE AL CASO)
 from dataclasses import dataclass
 
 @dataclass
@@ -57,7 +56,7 @@ class Connessione:
     def __str__(self):
         return f"{self.v1} - {self.v2}"
 
-//METODO 2 ARCHI -> itero sui nodi
+#METODO 2 ARCHI -> itero sui nodi
 
  def addEdges(self, distanza):
          self.grafo.clear_edges()
@@ -69,7 +68,7 @@ class Connessione:
                     distanzaCalcolata=geodesic(posizione1,posizione2).kilometers
                     if distanzaCalcolata<=distanza:
                         self.grafo.add_edge(nodo1, nodo2, weight=abs(distanzaCalcolata))
-//DATACLASSE TIPO
+#DATACLASSE TIPO
 from dataclasses import dataclass
 
 @dataclass
@@ -90,35 +89,42 @@ class Stato:
     def __str__(self):
         return f"{self.Name}"
 
-  //ORDINARE LISTA DI TUPLE 
+  #ORDINARE LISTA DI TUPLE
     ordinaLista=sorted(lista,key=lambda x:x[2], reverse=False)
 
-//ORDINARE DIZIONARIO per valore
+#ORDINARE DIZIONARIO per valore
     dizioOrdinato= dict(sorted(dizio.items(), key=lambda item: item[1], reverse=True))
 
-//TAGLIARE LA LISTA
-  listaOrdinata=listaOrdinata[:3]   -> questo codice mi permette di prendere i primi tre
+#TAGLIARE LA LISTA
+  listaOrdinata=listaOrdinata[:3]   #-> questo codice mi permette di prendere i primi tre
 
 
-//CALCOLO DISTANZA
-// CON IMPORTAZIONE DI import geopy.distance
+#CALCOLO DISTANZA CON IMPORTAZIONE DI import geopy.distance
 
 posizione1 = (nodo1.lat, nodo1.lng)
 posizione2 = (nodo2.lat, nodo2.lng)
 distanzaCalcolata= geopy.distance.distance(posizione1, posizione2).km
 
-//arrotondare a tot cifre
-rount(numero, numeroCifre)
+#arrotondare a tot cifre
+round(numero, numeroCifre)
 
-//splittare
+#splittare
         direttoreid=direttoreStringa.split("-")[0]
 
-//FAR ACCADERE QUALCOSA ALLA SELEZIONE DI UN DD
+#FAR ACCADERE QUALCOSA ALLA SELEZIONE DI UN DD (memorizzare l'oggetto)
         self.dd_anno=ft.Dropdown(label="Anno", on_change=self._controller.getSquadre)
-//NB captando un evento la funzione nel controller va dafinita così:   def getSquadre(self,e): con l'evento e
+#NB captando un evento la funzione nel controller va dafinita così:
+    def fillDD(self):
+        sortedStates = sorted(self._model.states, key=lambda s: s.StateNme) #itero su una lista ordinata
+        for s in sortedStates:
+            self._view._ddStates.options.append(ft.dropdown.Option(key=s.StateNme, data=s, on_click=self.choiceDD))
+        self._view.update_page()
 
+    def choiceDD(self, e):
+        self._view._ddStatesValue = e.control.data #recupero l'oggetto
+        return self._view._ddStatesValue
 
-//PREDECESSORI SUCCESSORI E RAGGIUNGIBILI:
+#PREDECESSORI SUCCESSORI E RAGGIUNGIBILI:
     def analisi(self, stato):
         prec=[]
         succ=[]
@@ -131,11 +137,11 @@ rount(numero, numeroCifre)
             all.append(nodi)
         return prec,succ,all
 
-//COMPONENTE CONNESSA CONTENENTE UN NODO
+#COMPONENTE CONNESSA CONTENENTE UN NODO
         nodiConnessi=list(nx.node_connected_component(self.grafo,album)
 
-//SE ESISTE IL PERCORSO TRA DUE NODI TROVA IL MINIMO
-                def esistePercorso(self, v0, v1):
+#SE ESISTE IL PERCORSO TRA DUE NODI TROVA IL MINIMO
+    def esistePercorso(self, v0, v1):
         connessa = nx.node_connected_component(self._grafo, v0)
         if v1 in connessa:
             return True

@@ -1,4 +1,4 @@
-//CHIAMATA DAO PER LISTA SEMPLICE NO PARAMETRI
+#CHIAMATA DAO PER LISTA SEMPLICE NO PARAMETRI
 
 @staticmethod
     def getNazione():
@@ -20,7 +20,7 @@ from go_retailers gr"""
         conn.close()
         return result
 
-//CHIAMATA DAO PER NODI E CONNESSIONI
+#CHIAMATA DAO PER NODI E CONNESSIONI
  @staticmethod
     def getNodi():
         conn = DBConnect.get_connection()
@@ -59,8 +59,8 @@ from go_retailers gr"""
         conn.close()
         return result
 
-//CHIAMATA DAO PER PESO DA UTILIZZARE SE IL GRAFO è PESATO E NON SI RIESCE
-//A INSERIRE IL PESO NELLE CONNESSIONI
+#CHIAMATA DAO PER PESO DA UTILIZZARE SE IL GRAFO è PESATO E NON SI RIESCE
+#A INSERIRE IL PESO NELLE CONNESSIONI
   
     @staticmethod
     def getPeso(forma,anno,stato1,stato2):
@@ -83,3 +83,71 @@ from go_retailers gr"""
         conn.close()
         return result
 
+
+    # per calcolare la distanza tra due circuiti
+        """SELECT 
+          c1.name AS circuito1,
+          c2.name AS circuito2,
+          6371 * ACOS(
+            COS(RADIANS(c1.lat)) * COS(RADIANS(c2.lat)) *
+            COS(RADIANS(c2.lng) - RADIANS(c1.lng)) +
+            SIN(RADIANS(c1.lat)) * SIN(RADIANS(c2.lat))
+          ) AS distanza_km
+        FROM circuits c1
+        JOIN circuits c2 ON c1.name = 'Monza' AND c2.name = 'Silverstone';"""
+
+    # per calcolare i circuiti entro 1000 km da Monza
+        """SELECT c2.name,
+                  c2.country,
+                  6371 * ACOS(
+                    COS(RADIANS(c1.lat)) * COS(RADIANS(c2.lat)) *
+                    COS(RADIANS(c2.lng) - RADIANS(c1.lng)) +
+                    SIN(RADIANS(c1.lat)) * SIN(RADIANS(c2.lat))
+                  ) AS distanza_km
+                FROM circuits c1
+                JOIN circuits c2 ON c1.name = 'Monza' AND c1.circuitId != c2.circuitId
+                HAVING distanza_km < 1000
+                ORDER BY distanza_km;"""
+
+    #Arco team A → team B se A ha fatto più punti di B nella stessa gara
+        """SELECT cr1.constructorId AS vincente,
+                  cr2.constructorId AS sconfitto,
+                  COUNT(*) AS volte_superato
+                FROM constructorresults cr1
+                JOIN constructorresults cr2 ON cr1.raceId = cr2.raceId 
+                  AND cr1.constructorId != cr2.constructorId
+                  AND cr1.points > cr2.points
+                GROUP BY cr1.constructorId, cr2.constructorId;"""
+
+    #Arco a → b se a ha finito una gara davanti a b
+        """SELECT r1.driverId AS vincente,
+              r2.driverId AS sconfitto,
+              COUNT(*) AS volte_sorpassato
+            FROM results r1
+            JOIN results r2 ON r1.raceId = r2.raceId 
+              AND r1.positionOrder < r2.positionOrder
+              AND r1.driverId != r2.driverId
+            GROUP BY r1.driverId, r2.driverId;"""
+
+    #due team partecipano alla stessa gara
+        """SELECT 
+          LEAST(c1.constructorId, c2.constructorId) AS team1,
+          GREATEST(c1.constructorId, c2.constructorId) AS team2,
+          COUNT(DISTINCT c1.raceId) AS gare_insieme
+        FROM constructorresults c1
+        JOIN constructorresults c2 ON c1.raceId = c2.raceId AND c1.constructorId != c2.constructorId
+        GROUP BY LEAST(c1.constructorId, c2.constructorId), GREATEST(c1.constructorId, c2.constructorId);"""
+
+    #due piloti che hanno corso nella stessa gara
+    """SELECT LEAST(r1.driverId, r2.driverId) AS driver1,
+          GREATEST(r1.driverId, r2.driverId) AS driver2,
+          COUNT(DISTINCT r1.raceId) AS gare_insieme
+        FROM results r1
+        JOIN results r2 ON r1.raceId = r2.raceId AND r1.driverId != r2.driverId
+        GROUP BY LEAST(r1.driverId, r2.driverId), GREATEST(r1.driverId, r2.driverId);"""
+
+    #in quale team corre un pilota
+    """SELECT r.driverId, r.constructorId, c.name AS team_name
+        FROM results r
+        JOIN constructors c ON r.constructorId = c.constructorId
+        WHERE r.driverId = 1;"""

@@ -1,25 +1,24 @@
 
-//VALIDAZIONE CAMPI:
+#VALIDAZIONE CAMPI:
 
-//dropdown
+#dropdown
 porzione=self._view.ddporzione.value
         if porzione is None:
             self._view.create_alert("Selezionare un tipo di porzione")
             return
-        dizio=self._model.analisi(porzione)
+        dizio = self._model.analisi(porzione)
 
-//textfield:
+#textfield:
 calorie=self._view.txtcalorie.value
 if calorie=="":
     self._view.create_alert("Inserire un valore numerico per le calorie")
     return
 grafo = self._model.creaGrafo( int(calorie)) 
 
-//NB: in entrambi i casi il cast del valore (se necessario) va fatto dopo altrimenti da errore
+#NB: in entrambi i casi il cast del valore (se necessario) va fatto dopo altrimenti da errore
 
 
-/RIMPIRE IL DROPDOWN -> ricordati di chiamare self._controller.fillDD() NELLA VIEW DOPO 
-//DOPO LA CREAZIONE DEL DD
+#RIMPIRE IL DROPDOWN -> ricordati di chiamare self._controller.fillDD() NELLA VIEW DOPO LA CREAZIONE DEL DD
 
     def fillDD(self):
         ann="201"
@@ -28,9 +27,9 @@ grafo = self._model.creaGrafo( int(calorie))
             self._view.dd_anno.options.append(ft.dropdown.Option(
                                text=anno))
 
-//RIEMPIRE IL IL DD DA UNA COLONNA/TABELLA DEL DATABASE
-//NB se nazioni fosse costituita da Oggetti bisogna accertarsi che il metodo
-/str stampa ciò che desideriamo inserire nel DD
+#RIEMPIRE IL IL DD DA UNA COLONNA/TABELLA DEL DATABASE
+#NB se nazioni fosse costituita da Oggetti bisogna accertarsi che il metodo
+#str stampa ciò che desideriamo inserire nel DD
 
 nazioni=self._model.getNazioni
 for nazione in nazioni:
@@ -38,7 +37,7 @@ for nazione in nazioni:
         text=nazione))
 
 
-//CREA GRAFO -> Ricordarsi la validazione dei campi se necessario
+#CREA GRAFO -> Ricordarsi la validazione dei campi se necessario
 
     def handle_grafo(self, e):
         nazione = self._view.dd_nazione.value
@@ -63,14 +62,14 @@ for nazione in nazioni:
 
 
   
-  //CREATE ALERT:
+  #CREATE ALERT:
     def create_alert(self, message):
         dlg = ft.AlertDialog(title=ft.Text(message))
         self._page.dialog = dlg
         dlg.open = True
         self._page.update()
 
-//UN DD CHE SI POPOLA AL CLICK SULL ALTRO
+#UN DD CHE SI POPOLA AL CLICK SULL ALTRO
     def fillDDanno(self):
         anni=self._model.getAnni
         for anno in anni:
@@ -85,13 +84,13 @@ for nazione in nazioni:
                 text=forma))
         self._view.update_page()
 
-SU VIEW:
+#SU VIEW:
  self.dd_anno=ft.Dropdown(label="Anno", on_change=self._controller.fillDDforme)
         self.dd_shape=ft.Dropdown(label="Shape")
         self._controller.fillDDanno()
 
 
-//GESTIONE INPUT:
+#GESTIONE INPUT:
  def fillDD(self):
         allNodes = self._model.getAllNodes()
         for n in allNodes:
@@ -115,11 +114,11 @@ SU VIEW:
             self._choiceAeroportoP = e.control.data
         print(f"readDDAeroportoP called -- {self._choiceAeroportoP}")
 
-//GESTIONE ERRORI:
+#GESTIONE ERRORI:
         soglia = self._view._txtInDistanza.value
         if soglia == "":
             self._view._txt_result.controls.clear()
-            self._view._txt_result.controls.append(ft.Text("Distanza non inserita."))    //oppure create alert
+            self._view._txt_result.controls.append(ft.Text("Distanza non inserita."))    #oppure create alert
             self._view.update_page()
             return
 
@@ -129,10 +128,11 @@ SU VIEW:
             self._view._txt_result.controls.clear()
             self._view._txt_result.controls.append(ft.Text("Attenzione, soglia inserita non numerica."))
             self._view.update_page()
-            return
-//CONTROLLER CON GESTIONE ERRORI
-  import flet as ft
 
+            return
+
+#CONTROLLER CON GESTIONE ERRORI
+  import flet as ft
 
 class Controller:
     def __init__(self, view, model):
@@ -158,9 +158,7 @@ class Controller:
         self._view.txt_result.controls.append(ft.Text(f"Il grafo contiene "
                                                       f"{self._model.getNumEdges()} archi."))
         for n in grafo:
-            self._view._ddAlbum.options.append(ft.dropdown.Option(data=n,
-                            text = n.Title, on_click=self.getSelectedAlbum
-                          ))
+            self._view._ddAlbum.options.append(ft.dropdown.Option(data=n, text = n.Title, on_click=self.getSelectedAlbum))
 
         self._view.update_page()
 
@@ -171,26 +169,22 @@ class Controller:
             self._choiceAlbum = e.control.data
 
 
-
     def handleAnalisiComp(self, e):
         if self._choiceAlbum is None:
             self._view.create_alert("Attenzione album non selezionato")
             return
         dimensione,durata=self._model.getAnalisi(self._choiceAlbum)
-        self._view.txt_result.controls.append(ft.Text(f"Componente conenssa -  {self._choiceAlbum} "
+        self._view.txt_result.controls.append(ft.Text(f"Componente connessa -  {self._choiceAlbum} "
                                                       f"di dimensione {dimensione} e durata complessiva"
                                                       f"pari a "
                                                       f"{durata}"))
 
         self._view.update_page()
 
-//NB IN QUESTO MODO L'ALBUM SELEZIONATO GIA' E' L'OGGETTO INTERO E NON SERVE L'IDMAP
-//NEL MODEL
+#NB IN QUESTO MODO L'ALBUM SELEZIONATO GIA' E' L'OGGETTO INTERO E NON SERVE L'IDMAP NEL MODEL
 
-//disabilitare e attivare bottoni:
+#disabilitare e attivare bottoni:
         self._txtInNumTratte = ft.TextField(label="Num Tratte Max", width=200,
                                                      disabled=True)
-//PER ATTIVARE:
+#PER ATTIVARE:
         self._view._txtInNumTratte.disabled = False
-//pul54
-    self._view.txt_result.controls.clear()
