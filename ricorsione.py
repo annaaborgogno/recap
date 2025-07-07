@@ -44,7 +44,6 @@ def handle_cerca(self,e):
         return pesoTot
 
 #RICORSIONE CON NODO DI PARTENZA E NODO FINALE CON UN VINCOLO E MASSIMIZZAZIONE DIVERSA (NO PESO)
-
  def getBestPath(self, limite,nodoInizialeStringa, nodoFinaleStringa):
         self._soluzione = []
         self._costoMigliore = 0
@@ -180,7 +179,7 @@ def handle_cerca(self,e):
         return memoriaTot
 
 #CAMMINO O PERCORSO = SELF.GRAFO.NEIGHBOURS
-#LISTA/INSEIEM -> non ci interessa se sono concatenati -> self.grafo.nodes
+#LISTA/INSIEME -> non ci interessa se sono concatenati -> self.grafo.nodes
 
 #RICORSIONE CON NODI NON RIPETUTI, INSIEME DI TOT ELEMENTI E ULTIMO NODO COINCIDENTE CON IL PRIMO
 
@@ -283,3 +282,57 @@ def handle_cerca(self,e):
         for arco in listaArchi:
             pesoTot += self.grafo[arco[0]][arco[1]]["weight"]
         return pesoTot
+
+# trovare il cammino più lungo a a partire da un nodo sorgente
+def getLongestPath(self, source):
+    longest_path = []
+    tree = nx.dfs_tree(self._graph, source)
+    nodes = list(tree.nodes())
+    for node in nodes:
+        temp = [node]
+
+        while temp[0] != source:
+            pred = nx.predecessor(tree, source, temp[0])  # restituisce una lista di predecessori
+            # lungo il cammino da source al nodo target (temp[0]) nel grafo G
+            temp.insert(0, pred[0])  # uso pred[0] perché in un albero dfs ogni nodo ha un solo predecessore
+            # quindi sto inserendo in posizione 0 il nodo predecessore, perché sto cercando i nodi a ritroso, con append otterrei il cammino al contrario
+
+        if len(temp) > len(longest_path):
+            longest_path = copy.deepcopy(temp)
+
+    return longest_path[1:]
+
+#trovare con un algoritmo ricorsivo un percorso di peso massimo, con peso degli archi strettamente decrescente
+def getBestPath(self, source):
+    self._bestPath = []
+    self._bestWeight = 0
+    parziale = [source]
+    self._ricorsione(parziale)
+    return self._bestPath, self._bestWeight
+
+
+def _ricorsione(self, parziale):
+    if self._calcolaPeso(parziale) > self._bestWeight:
+        self._bestPath = copy.deepcopy(parziale)
+        self._bestWeight = self._calcolaPeso(parziale)
+
+    for n in self._graph.neighbors(parziale[-1]):
+        if n not in parziale:
+            if len(parziale) == 1:
+                parziale.append(n)
+                self._ricorsione(parziale)
+                parziale.pop()
+        #se la lunghezza della lista è maggiore di 2, cioè c'è un arco
+            elif len(parziale) >= 2 and self._graph[parziale[-1]][n]["weight"] < self._graph[parziale[-2]][parziale[-1]]["weight"]:  # peso strettamente decrescente
+                parziale.append(n)
+                self._ricorsione(parziale)
+                parziale.pop()
+
+
+def _calcolaPeso(self, listOfNodes):
+    pesoTot = 0
+    for i in range(1, len(listOfNodes)): #per prendere il peso anche se sto ciclando sui nodi
+        u = listOfNodes[i - 1]
+        v = listOfNodes[i]
+        pesoTot += self._graph[u][v]["weight"]
+    return pesoTot
