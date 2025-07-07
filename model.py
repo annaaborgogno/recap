@@ -150,3 +150,22 @@ round(numero, numeroCifre)
 
     def trovaCamminoD(self, v0, v1):
         return nx.dijkstra_path(self._grafo, v0, v1)
+
+#sto cercando il cammino più lungo (in termini di nodi) a partire da un nodo sorgente
+  def getLongestPath(self, source):
+        longest_path = []
+        tree = nx.dfs_tree(self._graph, source)
+        nodes = list(tree.nodes())
+        for node in nodes:
+            temp = [node]
+
+            while temp[0] != source:
+               pred = nx.predecessor(tree, source, temp[0]) #restituisce una lista di predecessori
+               #lungo il cammino da source al nodo target (temp[0]) nel grafo G
+               temp.insert(0, pred[0]) #uso pred[0] perché in un albero dfs ogni nodo ha un solo predecessore
+               # quindi sto inserendo in posizione 0 il nodo predecessore, perché sto cercando i nodi a ritroso, con append otterrei il cammino al contrario
+
+               if len(temp) > len(longest_path):
+                  longest_path = copy.deepcopy(temp)
+
+               return longest_path
