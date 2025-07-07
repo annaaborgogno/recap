@@ -306,7 +306,7 @@ def getLongestPath(self, source):
 def getBestPath(self, source):
     self._bestPath = []
     self._bestWeight = 0
-    parziale = [source]
+    parziale = [source] #passo direttamente source perché ho il nodo nel controller (e non solo la stringa)
     self._ricorsione(parziale)
     return self._bestPath, self._bestWeight
 
@@ -336,3 +336,40 @@ def _calcolaPeso(self, listOfNodes):
         v = listOfNodes[i]
         pesoTot += self._graph[u][v]["weight"]
     return pesoTot
+
+# stesso output del codice sopra ma più efficiente, evita chiamate ricorsive su liste di lunghezza 1,
+ def getBestPath(self, startStr):
+        self._bestPath = []
+        self._bestScore = 0
+
+        start = self._idMap[int(startStr)]
+
+        parziale = [start]
+
+        vicini = self._graph.neighbors(start)
+        for v in vicini:
+            parziale.append(v)
+            self._ricorsione(parziale)
+            parziale.pop()
+
+        return self._bestPath, self._bestScore
+    def _ricorsione(self, parziale):
+        if self.getScore(parziale) > self._bestScore:
+            self._bestScore = self.getScore(parziale)
+            self._bestPath = copy.deepcopy(parziale)
+
+        for v in self._graph.neighbors(parziale[-1]):
+            if (v not in parziale and #check if not in parziale
+                    self._graph[parziale[-2]][parziale[-1]]["weight"] >
+                    self._graph[parziale[-1]][v]["weight"]): #check if peso nuovo arco è minore del precedente
+                # il controllo sull'arco precedente viene fatto sempre, perché all'inizio la chiamata ricorsiva parte da parziale di lunghezza 2
+                parziale.append(v)
+                self._ricorsione(parziale)
+                parziale.pop()
+
+    def getScore(self, listOfNodes):
+        tot = 0
+        for i in range(len(listOfNodes) - 1):
+            tot += self._graph[listOfNodes[i]][listOfNodes[i + 1]]["weight"]
+
+        return tot
