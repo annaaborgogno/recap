@@ -373,3 +373,40 @@ def _calcolaPeso(self, listOfNodes):
             tot += self._graph[listOfNodes[i]][listOfNodes[i + 1]]["weight"]
 
         return tot
+
+#  identificare un percorso semplice e chiuso a peso massimo composto da esattamente N archi
+def getBestPath(self, n):
+    self._bestPath = []
+    self._maxWeight = 0
+
+    for start in self._graph.nodes:
+        parziale = [start]
+        self._ricorsione(start, parziale, n)
+
+    return self._bestPath, self._maxWeight
+
+
+def _ricorsione(self, start, parziale, n):
+    if len(parziale) == n:  # ciclo composto da esattamente n archi
+        lastNode = parziale[-1]
+        if self._graph.has_edge(lastNode, start):
+            parziale.append(start)
+            if self.getMaxWeight(parziale) > self._maxWeight:
+                self._maxWeight = self.getMaxWeight(parziale)
+                self._bestPath = copy.deepcopy(parziale)
+            parziale.pop()  # rimuove il nodo iniziale dopo la verifica
+        return
+
+    lastNode = parziale[-1]
+    for n in self._graph.neighbors(lastNode):
+        if n not in parziale and n != start:  # verifica che non ci siano ripetizioni, tranne per l'inizio e la fine
+            parziale.append(n)
+            self._ricorsione(start, parziale, n)
+            parziale.pop()
+
+
+def getMaxWeight(self, listOfNodes):
+    pesoTot = 0
+    for i in range(0, len(listOfNodes) - 1):
+        pesoTot += self.getPeso(listOfNodes[i], listOfNodes[i + 1])
+    return pesoTot
