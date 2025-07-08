@@ -410,3 +410,33 @@ def getMaxWeight(self, listOfNodes):
     for i in range(0, len(listOfNodes) - 1):
         pesoTot += self.getPeso(listOfNodes[i], listOfNodes[i + 1])
     return pesoTot
+
+# ricorsione per trovare un insieme di nodi di dimensione k con minimo tasso di sconfitta (pesi degli archi)
+def getDreamTeam(self, k):
+    self._dreamTeam = []
+    self._tSconfitta = float("inf")
+
+    parziale = []
+    self._ricorsione(k, parziale)
+    return self._dreamTeam, self._tSconfitta
+
+
+def _ricorsione(self, k, parziale):
+    if len(self._dreamTeam) == k:
+        if self._getTSconfitta(parziale) < self._tSconfitta:
+            self._tSconfitta = self._getTSconfitta(parziale)
+            self._dreamTeam = copy.deepcopy(parziale)
+        return
+
+    for n in self._nodes:
+        if n not in parziale:
+            parziale.append(n)
+            self._ricorsione(k, parziale)
+            parziale.remove(n)
+
+def _getTSconfitta(self, team):
+    t = 0
+    for e in self._graph.edges():
+        if e[0] not in team and e[1] in team:
+            t += e[2]["weight"]
+    return t
