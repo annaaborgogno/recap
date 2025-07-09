@@ -123,7 +123,6 @@ def handle_cerca(self,e):
 
 #RICORSIONE SU GRAFO ORIENTATO CON REQUISITI SPECIFICI QUALI: primo vertice no archi entranti, ultimo vertice no archi uscenti
 # vertici intermedi adiacenti e massimizzazione della lunghezza
-
  def getBestPath(self):
         self._soluzione = []
         self._costoMigliore = 0
@@ -182,7 +181,6 @@ def handle_cerca(self,e):
 #LISTA/INSIEME -> non ci interessa se sono concatenati -> self.grafo.nodes
 
 #RICORSIONE CON NODI NON RIPETUTI, INSIEME DI TOT ELEMENTI E ULTIMO NODO COINCIDENTE CON IL PRIMO
-
     def getBestPath(self, limiteEsatto):
         self._soluzione = []
         self._costoMigliore = 0
