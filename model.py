@@ -188,3 +188,18 @@ def getLongestPath(self, source):
             longest_path = copy.deepcopy(temp)
 
     return longest_path[1:]
+
+#per il cammino migliore (più lungo) con i successori
+def getLongestPath(self, source):
+    tree = nx.dfs_tree(self._graph, source)
+
+    def dfs(node):
+        longest = []
+        for succ in tree.successors(node):
+            path = dfs(succ)
+            if len(path) > len(longest):
+                longest = path
+        return [node] + longest
+
+    path = dfs(source)
+    return path[1:]  # esclude il nodo sorgente se vuoi solo il "cammino"
