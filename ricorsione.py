@@ -37,6 +37,7 @@ def handle_cerca(self,e):
                     parziale.append(n)
                     self._ricorsione(parziale, limite)
                     parziale.pop()
+
     def peso(self, listaNodi):
         pesoTot = 0
         for i in range(0, len(listaNodi) - 1):
@@ -71,6 +72,7 @@ def handle_cerca(self,e):
             if self.grafo[listaNodi[i]][listaNodi[i + 1]]["weight"]<limite:
                 ammissibile=False
         return ammissibile
+
     def count(self, listaNodi):
         bilancioRiferimento=self.bilancio(listaNodi[0])
         contatore=0
@@ -109,6 +111,7 @@ def handle_cerca(self,e):
                     parziale.pop()
                     for arcoUscente in self.grafo.out_edges(n):
                         battuti.remove(arcoUscente[1])
+
     def grado(self, listaNodi):
         gradoTot = 0
         for nodo in listaNodi:
@@ -146,7 +149,6 @@ def handle_cerca(self,e):
 
 
 #RICORSIONE CON I NODI APPARTENENTI ALLA STESSA COMPONENTE CONNESSA DI UN NODO INIZIALE
-
  def getBestPath(self, nodoInizialeString, limite):
         self._soluzione = []
         self._costoMigliore = 0
@@ -281,24 +283,6 @@ def handle_cerca(self,e):
             pesoTot += self.grafo[arco[0]][arco[1]]["weight"]
         return pesoTot
 
-# trovare il cammino più lungo a a partire da un nodo sorgente
-def getLongestPath(self, source):
-    longest_path = []
-    tree = nx.dfs_tree(self._graph, source)
-    nodes = list(tree.nodes())
-    for node in nodes:
-        temp = [node]
-
-        while temp[0] != source:
-            pred = nx.predecessor(tree, source, temp[0])  # restituisce una lista di predecessori
-            # lungo il cammino da source al nodo target (temp[0]) nel grafo G
-            temp.insert(0, pred[0])  # uso pred[0] perché in un albero dfs ogni nodo ha un solo predecessore
-            # quindi sto inserendo in posizione 0 il nodo predecessore, perché sto cercando i nodi a ritroso, con append otterrei il cammino al contrario
-
-        if len(temp) > len(longest_path):
-            longest_path = copy.deepcopy(temp)
-
-    return longest_path[1:]
 
 #trovare con un algoritmo ricorsivo un percorso di peso massimo, con peso degli archi strettamente decrescente
 def getBestPath(self, source):
